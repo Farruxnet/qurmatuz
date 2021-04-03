@@ -13,7 +13,9 @@ USER_STEP = {
     'GET_TEL': 11,
     'GET_N': 12,
     'CHECK': 13,
-    'FINAL': 14
+    'FINAL': 14,
+    #### search ####
+    'SEARCH': 15
 }
 
 LAN = {

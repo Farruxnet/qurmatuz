@@ -8,6 +8,7 @@ from . service import *
 from botconfig.models import Category, Config
 from . const import LAN, USER_STEP
 from django.http.response import HttpResponse
+from . search import *
 bot = telebot.TeleBot(settings.BOT_TOKEN)
 import logging
 logging.basicConfig(filename="adas.log", format=' %(asctime)s - %(levelname)s - %(message)s')
@@ -479,6 +480,7 @@ def get_search(message):
     addavto_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     addavto_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['home']))
     bot.send_message(message.chat.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['search'], reply_markup=addavto_button)
+    TgUser.objects.filter(tg_id=message.chat.id).update(step=USER_STEP['SEARCH'])
 
 
 @bot.message_handler(content_types=['text', 'contact'])
@@ -498,6 +500,8 @@ def text_handler(message):
         USER_STEP['GET_N']: narx,
         USER_STEP['CHECK']: check,
         USER_STEP['FINAL']: final,
+        #### search ####
+        
     }
     print("qadam=> ", TgUser.objects.get(tg_id=message.chat.id).step)
     func = switcher.get(TgUser.objects.get(tg_id=message.chat.id).step, lambda: start_handler(message))
