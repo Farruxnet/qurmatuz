@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>XABAR YUBORISH</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="/admin">QURMAT.UZ</a>
+  </nav>
+  <div class="container-fluid" style="padding-top:3%; padding-left: 15%; padding-right: 15%;">
+    <div class="row align-items-start">
+      <div class="col">
+
+        <form id="contactForm" action="/sendmessage" novalidate="" method="GET">
+          <div class="form-group">
+            <div class="alert alert-success" style="text-align: center;">
+                 Barcha foydalanuvchilarga xabar yuborish
+             </div>
+            <textarea autofocus placeholder="Xabar matni..." name="text" class="form-control" rows="5" cols="50"></textarea>
+          </div>
+        <button type="submit" class="btn btn-success">Yuborish<span></span></button>
+       </form>
+      </div>
+   </div>
+  </div>
+  <br>
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/admin">QURMAT.UZ</a>
+  </nav>
+  </body>
+</html>
