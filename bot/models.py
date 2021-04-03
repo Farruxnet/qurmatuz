@@ -14,6 +14,18 @@ class TgUser(models.Model):
     def __str__(self):
         return self.name
 
+class UserSearch(models.Model):
+    tg_id = models.IntegerField()
+    status = models.BooleanField(default=False)
+    category = models.CharField(max_length=50, null=True)
+    narx = models.CharField(max_length=50, null=True)
+    podcategory = models.CharField(max_length=50, null=True)
+    avto = models.CharField(max_length=50, null=True)
+    avtokub = models.CharField(max_length=50, null=True)
+    viloyat = models.CharField(max_length=50, null=True)
+    tuman = models.CharField(max_length=50, null=True)
+
+
 class UserCart(models.Model):
     user = models.ForeignKey(TgUser, on_delete=models.CASCADE, verbose_name='Foydalanuvchi')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Bo\'lim')
