@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import TgUser, UserCart
+from . models import TgUser, UserCart, UserSearch
 from django.utils.html import format_html
 admin.site.site_header = 'Boshqaruv paneli'
 admin.site.site_title = 'Boshqaruv paneli'
@@ -13,3 +13,4 @@ class TgUserAdmin(admin.ModelAdmin):
 
 admin.site.register(TgUser, TgUserAdmin)
 admin.site.register(UserCart, UserCartAdmin)
+admin.site.register(UserSearch)

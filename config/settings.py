@@ -112,5 +112,5 @@ USE_L10N = True
 
 USE_TZ = True
 BOT_TOKEN = "1697169888:AAEhP6YLf9ld0Sfgozg-vl-kSpdI9BEuE6U"
-WEB_HOOK_URL = "https://9f4b24953c41.ngrok.io"
+WEB_HOOK_URL = "https://d2ba11975a6e.ngrok.io"
 STATIC_URL = '/static/'

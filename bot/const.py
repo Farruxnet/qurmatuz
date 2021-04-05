@@ -15,7 +15,14 @@ USER_STEP = {
     'CHECK': 13,
     'FINAL': 14,
     #### search ####
-    'SEARCH': 15
+    'SEARCH': 15,
+    'SEARCH_POD': 16,
+    'SEARCH_AVTO': 17,
+    'SEARCH_AVTO_KUB': 18,
+    'SEARCH_VILOYAT': 19,
+    'SEARCH_TUMAN': 20,
+    'SEARCH_NARX': 21,
+    'SEARCH_RESULT': 22
 }
 
 LAN = {
