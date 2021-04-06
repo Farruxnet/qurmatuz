@@ -29,7 +29,6 @@ LAN = {
     'oz':{
         'active': 'Faollashtirilgan',
         'act': 'Sizning hisobingizda mablag\' etarli emas! Hisobingizni mablag\' bilan to\'ldiring va \"Mening e\'lonlarim\" bo\'limida e\'loningizni faollashtiring. ',
-
         'balance_not': 'Hisobingizda mablag\' yetarli emas',
         'activ_ok': 'Faollashtirildi',
         'error': 'Xato! Qaytadan urunib ko\'ring.',
@@ -69,7 +68,13 @@ LAN = {
         'my_post': '📢 Mening e\'lonlarim',
         'post_not': 'Sizda e\'lonlar yo\'q',
         'balance': '💰 Hisobim',
-        'activ': 'Faollashtirish'
+        'activ': 'Faollashtirish',
+        'search_what1': 'Qanday qurilish mahsuloti qidiryapsiz?',
+        'search_pod1': 'Mahsulot turi qanday?',
+        'search_avto1': 'Mahsulot uchun qanday mashina kerak?',
+        'search_avto_kub1': 'Mashina hajmi qancha bo\'lsin?',
+        'search_viloyat1': 'Qaysi viloyatdansiz?',
+        'search_tuman1': 'Qaysi tumandansiz?',
 
 
     },
@@ -116,7 +121,13 @@ LAN = {
         'my_post': '📢 Мои объявления',
         'post_not': 'Сизда эълонлар йўқ',
         'balance': '💰 Мой счет',
-        'activ': 'Активация'
+        'activ': 'Активация',
+        'search_what1': 'Какой строительный продукт вы ищете?',
+        'search_pod1': 'Какой тип продукта?',
+        'search_avto1': 'Какая машина вам нужна для продукта?',
+        'search_avto_kub1': 'Какая вместимость машины?',
+        'search_viloyat1': 'Из какой ты област?',
+        'search_tuman1': 'Из какого ты района?',
 
 
     },
@@ -163,6 +174,12 @@ LAN = {
         'my_post': '📢 Менинг эълонларим',
         'post_not': 'Сизда эълонлар йўқ',
         'balance': '💰 Ҳисобим',
-        'activ': 'Фаоллаштириш'
+        'activ': 'Фаоллаштириш',
+        'search_what1': 'Қандай қурилиш маҳсулоти қидиряпсиз?',
+        'search_pod1': 'Маҳсулот тури қандай?',
+        'search_avto1': 'Маҳсулот учун қандай машина керак?',
+        'search_avto_kub1': 'Машина ҳажми қанча бўлсин?',
+        'search_viloyat1': 'Қайси вилоятдансиз?',
+        'search_tuman1': 'Қайси тумандансиз?',
     }
 }

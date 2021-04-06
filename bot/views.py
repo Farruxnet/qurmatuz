@@ -478,8 +478,8 @@ def get_edit_lan(message):
 @bot.message_handler(func=lambda msg: msg.text == LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=msg.chat.id))]['search'])
 def get_search(message):
     from . models import UserSearch
-    if UserSearch.objects.get(tg_id=message.from_user.id, status=False):
-        UserSearch.objects.get(tg_id=message.from_user.id, status=False).delete()
+    if UserSearch.objects.filter(tg_id=message.from_user.id):
+        UserSearch.objects.filter(tg_id=message.from_user.id).delete()
         if Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id)) == 'oz':
             search_button_oz = []
             for j in Category.objects.all():
@@ -488,7 +488,7 @@ def get_search(message):
             search_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             search_button.add(*search_button_oz)
             search_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['home']))
-            bot.send_message(message.chat.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['search'], reply_markup=search_button)
+            bot.send_message(message.chat.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['search_what1'], reply_markup=search_button)
             TgUser.objects.filter(tg_id=message.chat.id).update(step=USER_STEP['SEARCH'])
 
         elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id)) == 'uz':
@@ -513,6 +513,8 @@ def get_search(message):
             bot.send_message(message.chat.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['search'], reply_markup=search_button)
             TgUser.objects.filter(tg_id=message.chat.id).update(step=USER_STEP['SEARCH'])
     else:
+        print(3)
+
         if Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id)) == 'oz':
             search_button_oz = []
             for j in Category.objects.all():
@@ -571,7 +573,6 @@ def text_handler(message):
         USER_STEP['SEARCH_AVTO_KUB']: search_avto_kub,
         USER_STEP['SEARCH_VILOYAT']: search_viloyat,
         USER_STEP['SEARCH_TUMAN']: search_tuman,
-        USER_STEP['SEARCH_NARX']: search_narx,
         USER_STEP['SEARCH_RESULT']: search_result,
         USER_STEP['SEARCH_POD']: search_avto_list
 

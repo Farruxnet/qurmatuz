@@ -16,9 +16,7 @@ class TgUser(models.Model):
 
 class UserSearch(models.Model):
     tg_id = models.IntegerField()
-    status = models.BooleanField(default=False)
     category = models.CharField(max_length=50, null=True)
-    narx = models.CharField(max_length=50, null=True)
     podcategory = models.CharField(max_length=50, null=True)
     avto = models.CharField(max_length=50, null=True)
     avtokub = models.CharField(max_length=50, null=True)
