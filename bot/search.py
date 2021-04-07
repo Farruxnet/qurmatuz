@@ -3,10 +3,10 @@ from telebot import types
 from . models import TgUser, UserCart
 from . const import LAN, USER_STEP
 from django.conf import settings
-from botconfig.models import PodCategory, Category, Avto, AvtoKub, Viloyat, Tuman, StartNarx, Paket
+from botconfig.models import PodCategory, Category, Avto, AvtoKub, Viloyat, Tuman, StartNarx, Paket, Config
 from . service import Service
 from . models import UserSearch
-
+from math import ceil
 def search(message, bot):
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
         searchobj = UserSearch()
@@ -35,14 +35,59 @@ def search(message, bot):
 
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        pass
+        searchobj = UserSearch()
+        searchobj.tg_id = message.from_user.id
+        searchobj.category = message.text
+        searchobj.save()
+        if PodCategory.objects.filter(category=Category.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).category).id):
+            pod_cat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            buttons = [types.KeyboardButton(text=text.uz) for text in PodCategory.objects.filter(category=Category.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).category))]
+            pod_cat_button.add(*buttons)
+            pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_pod1'], reply_markup=pod_cat_button)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_POD'])
+        else:
+            try:
+                btn = []
+                for j in Avto.objects.all():
+                    btn.append(types.KeyboardButton(text=j.uz))
+                add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+                add_avto_replay_button.add(*btn)
+                add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+                bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
+                TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
+            except:
+                bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
+
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        pass
+        searchobj = UserSearch()
+        searchobj.tg_id = message.from_user.id
+        searchobj.category = message.text
+        searchobj.save()
+        if PodCategory.objects.filter(category=Category.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).category).id):
+            pod_cat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            buttons = [types.KeyboardButton(text=text.ru) for text in PodCategory.objects.filter(category=Category.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).category))]
+            pod_cat_button.add(*buttons)
+            pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_pod1'], reply_markup=pod_cat_button)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_POD'])
+        else:
+            try:
+                btn = []
+                for j in Avto.objects.all():
+                    btn.append(types.KeyboardButton(text=j.ru))
+                add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+                add_avto_replay_button.add(*btn)
+                add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+                bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
+                TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
+            except:
+                bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
+
 
 def search_avto_list(message, bot):
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
         try:
-
             UserSearch.objects.filter(tg_id=message.from_user.id).update(podcategory=message.text)
             btn = []
             for j in Avto.objects.all():
@@ -55,9 +100,31 @@ def search_avto_list(message, bot):
         except:
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        pass
+        try:
+            UserSearch.objects.filter(tg_id=message.from_user.id).update(podcategory=message.text)
+            btn = []
+            for j in Avto.objects.all():
+                btn.append(types.KeyboardButton(text=j.uz))
+            add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            add_avto_replay_button.add(*btn)
+            add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
+        except:
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        pass
+        try:
+            UserSearch.objects.filter(tg_id=message.from_user.id).update(podcategory=message.text)
+            btn = []
+            for j in Avto.objects.all():
+                btn.append(types.KeyboardButton(text=j.ru))
+            add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            add_avto_replay_button.add(*btn)
+            add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
+        except:
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
 
 def search_avto_kub(message, bot):
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
@@ -75,9 +142,26 @@ def search_avto_kub(message, bot):
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
         UserSearch.objects.filter(tg_id=message.from_user.id).update(avto=message.text)
+
+        btnkuboz = []
+        kub_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        for i in Avto.objects.all().filter(uz=message.text):
+            for j in i.kub.all():
+                btnkuboz.append(types.KeyboardButton(text=str(j)))
+        kub_button.add(*btnkuboz)
+        kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+        bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto_kub1'], reply_markup=kub_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_VILOYAT'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
         UserSearch.objects.filter(tg_id=message.from_user.id).update(avto=message.text)
+        btnkuboz = []
+        kub_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        for i in Avto.objects.all().filter(ru=message.text):
+            for j in i.kub.all():
+                btnkuboz.append(types.KeyboardButton(text=str(j)))
+        kub_button.add(*btnkuboz)
+        kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+        bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto_kub1'], reply_markup=kub_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_VILOYAT'])
 
 def search_viloyat(message, bot):
@@ -94,9 +178,27 @@ def search_viloyat(message, bot):
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_TUMAN'])
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        pass
+        UserSearch.objects.filter(tg_id=message.from_user.id).update(avtokub=message.text)
+        viloyat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        btn = []
+        for i in Viloyat.objects.all().filter(status=True):
+            btn.append(types.KeyboardButton(text=i.uz))
+
+        viloyat_button.add(*btn)
+        viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+        bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_viloyat1'], reply_markup=viloyat_button)
+        TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_TUMAN'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        pass
+        UserSearch.objects.filter(tg_id=message.from_user.id).update(avtokub=message.text)
+        viloyat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        btn = []
+        for i in Viloyat.objects.all().filter(status=True):
+            btn.append(types.KeyboardButton(text=i.ru))
+
+        viloyat_button.add(*btn)
+        viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+        bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_viloyat1'], reply_markup=viloyat_button)
+        TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_TUMAN'])
 
 def search_tuman(message, bot):
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
@@ -110,59 +212,132 @@ def search_tuman(message, bot):
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_tuman1'], reply_markup=tuman_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_RESULT'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        pass
+        UserSearch.objects.filter(tg_id=message.from_user.id).update(viloyat=message.text)
+        btn = []
+        for j in Tuman.objects.filter(viloyat=Viloyat.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id):
+            btn.append(types.KeyboardButton(text=j.uz))
+        tuman_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        tuman_button.add(*btn)
+        tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+        bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_tuman1'], reply_markup=tuman_button)
+        TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_RESULT'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        pass
-
-def search_narx(message, bot):
-    if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
-        UserSearch.objects.filter(tg_id=message.from_user.id).update(tuman=message.text)
-        btnnarx = []
-        for narx in StartNarx.objects.all():
-            btnnarx.append(types.KeyboardButton(text=narx.narx))
-        narx_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        narx_button.add(*btnnarx)
-        narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['kelishilgan']))
-        narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price']+'So\'m', reply_markup=narx_button)
+        UserSearch.objects.filter(tg_id=message.from_user.id).update(viloyat=message.text)
+        btn = []
+        for j in Tuman.objects.filter(viloyat=Viloyat.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id):
+            btn.append(types.KeyboardButton(text=j.ru))
+        tuman_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        tuman_button.add(*btn)
+        tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+        bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_tuman1'], reply_markup=tuman_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_RESULT'])
 
-
-    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        pass
-    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        pass
 
 def search_result(message, bot):
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
         from django.db.models import Q
+        from django.core.paginator import Paginator
         UserSearch.objects.filter(tg_id=message.from_user.id).update(tuman=message.text)
-        print(1)
         if PodCategory.objects.filter(oz=UserSearch.objects.get(tg_id=message.from_user.id).podcategory):
-            print(2)
-            search_object = UserCart.objects.filter(
-                (Q(category=Category.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).category).id) | Q(podcategory=PodCategory.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).podcategory).id)) &
-                (Q(avto=Avto.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).avto).id) | Q(kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub))) &
-                (Q(viloyat=Viloyat.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat)) & Q(tuman=Tuman.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).tuman)))
-            )
+            search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).tuman).id, viloyat=Viloyat.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id, avto=Avto.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub).id, podcategory=PodCategory.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).podcategory).id, category=Category.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).category).id).order_by('-id')
+            paginator = Paginator(search_obj, Service.get_count(Config.objects.all()))
+            search_object = paginator.get_page(1)
         else:
-            print(3)
-            search_object = UserCart.objects.filter(
-                (Q(category=Category.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).category).id) | Q(podcategory=PodCategory.objects.get(oz=None))) &
-                (Q(avto=Avto.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).avto).id) | Q(kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub))) &
-                (Q(viloyat=Viloyat.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat)) & Q(tuman=Tuman.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).tuman)))
-            )
+            search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).tuman).id, viloyat=Viloyat.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id, avto=Avto.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub).id, podcategory=None, category=Category.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).category).id)
+            paginator = Paginator(search_obj, Service.get_count(Config.objects.all()))
+            search_object = paginator.get_page(1)
 
         if search_object:
             for i in search_object:
-                bot.send_message(message.from_user.id, i.viloyat.oz+'\n'+i.tuman.oz+'\n'+i.category.oz+'\n'+i.podcategory.oz)
+                if i.podcategory:
+                    pcat =  i.podcategory.oz
+                else:
+                    pcat = ''
+                if i.narx:
+                    nnarx = i.narx
+                else:
+                    nnarx = 'Kelishilgan narx'
+                if i.username:
+                    usern = '@'+i.username
+                else:
+                    usern = i.telefon
+                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.oz}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.oz}, {i.kub} kub\nViloyat: {i.viloyat.oz}, {i.tuman.oz}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\n')
+
+            btnsearch = types.InlineKeyboardMarkup()
+            btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
+            bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
         else:
-            bot.send_message(message.from_user.id, 'Topilmadi')
+            bot.send_message(message.from_user.id, 'Siz kiritgan ma\'lumotlar bo\'yicha topilmadi')
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        pass
+        from django.db.models import Q
+        from django.core.paginator import Paginator
+        UserSearch.objects.filter(tg_id=message.from_user.id).update(tuman=message.text)
+        if PodCategory.objects.filter(uz=UserSearch.objects.get(tg_id=message.from_user.id).podcategory):
+            search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).tuman).id, viloyat=Viloyat.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id, avto=Avto.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub).id, podcategory=PodCategory.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).podcategory).id, category=Category.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).category).id).order_by('-id')
+            paginator = Paginator(search_obj, Service.get_count(Config.objects.all()))
+            search_object = paginator.get_page(1)
+        else:
+            search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).tuman).id, viloyat=Viloyat.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id, avto=Avto.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub).id, podcategory=None, category=Category.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).category).id)
+            paginator = Paginator(search_obj, Service.get_count(Config.objects.all()))
+            search_object = paginator.get_page(1)
+
+        if search_object:
+            for i in search_object:
+                if i.podcategory:
+                    pcat =  i.podcategory.uz
+                else:
+                    pcat = ''
+                if i.narx:
+                    nnarx = i.narx
+                else:
+                    nnarx = 'Kelishilgan narx'
+                if i.username:
+                    usern = '@'+i.username
+                else:
+                    usern = i.telefon
+                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.uz}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.uz}, {i.kub} kub\nViloyat: {i.viloyat.uz}, {i.tuman.uz}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\n')
+
+            btnsearch = types.InlineKeyboardMarkup()
+            btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
+            bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
+        else:
+            bot.send_message(message.from_user.id, 'Сиз киритган маълумотлар бўйича топилмади')
+
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        pass
+        from django.db.models import Q
+        from django.core.paginator import Paginator
+        UserSearch.objects.filter(tg_id=message.from_user.id).update(tuman=message.text)
+        if PodCategory.objects.filter(ru=UserSearch.objects.get(tg_id=message.from_user.id).podcategory):
+            search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).tuman).id, viloyat=Viloyat.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id, avto=Avto.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub).id, podcategory=PodCategory.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).podcategory).id, category=Category.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).category).id).order_by('-id')
+            paginator = Paginator(search_obj, Service.get_count(Config.objects.all()))
+            search_object = paginator.get_page(1)
+        else:
+            search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).tuman).id, viloyat=Viloyat.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).viloyat).id, avto=Avto.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=message.from_user.id).avtokub).id, podcategory=None, category=Category.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).category).id)
+            paginator = Paginator(search_obj, Service.get_count(Config.objects.all()))
+            search_object = paginator.get_page(1)
+
+        if search_object:
+            for i in search_object:
+                if i.podcategory:
+                    pcat =  i.podcategory.ru
+                else:
+                    pcat = ''
+                if i.narx:
+                    nnarx = i.narx
+                else:
+                    nnarx = 'Kelishilgan narx'
+                if i.username:
+                    usern = '@'+i.username
+                else:
+                    usern = i.telefon
+                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.ru}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.ru}, {i.kub} kub\nViloyat: {i.viloyat.ru}, {i.tuman.ru}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\n')
+
+            btnsearch = types.InlineKeyboardMarkup()
+            btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
+            bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
+        else:
+            bot.send_message(message.from_user.id, 'Не найдено согласно введенной вами информации')
 
 
 

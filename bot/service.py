@@ -4,6 +4,8 @@ from . models import TgUser, UserCart
 from . const import LAN, USER_STEP
 from django.conf import settings
 from botconfig.models import PodCategory, Category, Avto, AvtoKub, Viloyat, Tuman, StartNarx, Paket
+# 1 - search notifications server orqali bash script bilan
+# 2 - deatline delete server orqali bash script bilan
 
 class Service:
     def get_user_lan(object):
