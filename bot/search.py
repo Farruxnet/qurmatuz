@@ -267,8 +267,12 @@ def search_result(message, bot):
             btnsearch = types.InlineKeyboardMarkup()
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
+            
         else:
             bot.send_message(message.from_user.id, 'Siz kiritgan ma\'lumotlar bo\'yicha topilmadi')
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
+
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
         from django.db.models import Q
@@ -302,8 +306,12 @@ def search_result(message, bot):
             btnsearch = types.InlineKeyboardMarkup()
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
+
         else:
             bot.send_message(message.from_user.id, 'Сиз киритган маълумотлар бўйича топилмади')
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
+
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
         from django.db.models import Q
@@ -337,8 +345,12 @@ def search_result(message, bot):
             btnsearch = types.InlineKeyboardMarkup()
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
+
         else:
             bot.send_message(message.from_user.id, 'Не найдено согласно введенной вами информации')
+            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
+
 
 
 

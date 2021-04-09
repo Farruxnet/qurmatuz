@@ -665,16 +665,18 @@ def final(message, bot):
 
 def check(message, bot):
     if message.text == LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']:
-        UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
         bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['success_add'], reply_markup=home_func(message))
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
-        if int(TgUser.objects.filter(tg_id=message.from_user.id)[0].balance) >= int(Paket.objects.filter(id=UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=True)[0].paket_id)[0].price):
+        if int(TgUser.objects.filter(tg_id=message.from_user.id)[0].balance) >= int(Paket.objects.filter(id=UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=False)[0].paket_id)[0].price):
             from django.db.models import F
             TgUser.objects.filter(tg_id=message.from_user.id).update(balance=F('balance') - int(Paket.objects.filter(id=UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=True)[0].paket_id)[0].price))
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=True).update(status=True)
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=False).update(status=True)
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['activ_ok'])
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
         else:
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['act'])
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
+
 
 
     elif message.text == LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']:
