@@ -261,7 +261,8 @@ def search_result(message, bot):
                     usern = '@'+i.username
                 else:
                     usern = i.telefon
-                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.oz}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.oz}, {i.kub} kub\nViloyat: {i.viloyat.oz}, {i.tuman.oz}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\n')
+                bot.send_message(message.from_user.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pcat}\n<b>Boshlang\'ich narx:</b> {nnarx}\n<b>Moshina rusumi</b>: {i.avto.oz}, {i.kub} kub\n<b>Viloyat</b>: {i.viloyat.oz}, {i.tuman.oz}\n\n☎️ {i.telefon}\n\n✏️ {usern}', parse_mode="HTML")
+
 
             btnsearch = types.InlineKeyboardMarkup()
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
@@ -291,12 +292,12 @@ def search_result(message, bot):
                 if i.narx:
                     nnarx = i.narx
                 else:
-                    nnarx = 'Kelishilgan narx'
+                    nnarx = 'Келишилган нарх'
                 if i.username:
                     usern = '@'+i.username
                 else:
                     usern = i.telefon
-                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.uz}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.uz}, {i.kub} kub\nViloyat: {i.viloyat.uz}, {i.tuman.uz}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\n')
+                bot.send_message(message.from_user.id, f'\n<b>Категория:</b> {i.category.uz}, {pcat}\n<b>Бошланғич нарх:</b> {nnarx}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n☎️ {i.telefon}\n\n✏️ {usern}\n', parse_mode="HTML")
 
             btnsearch = types.InlineKeyboardMarkup()
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
@@ -326,12 +327,12 @@ def search_result(message, bot):
                 if i.narx:
                     nnarx = i.narx
                 else:
-                    nnarx = 'Kelishilgan narx'
+                    nnarx = 'Цена договорная'
                 if i.username:
                     usern = '@'+i.username
                 else:
                     usern = i.telefon
-                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.ru}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.ru}, {i.kub} kub\nViloyat: {i.viloyat.ru}, {i.tuman.ru}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\n')
+                bot.send_message(message.from_user.id, f'\n<b>Категория:</b> {i.category.ru}, {pcat}\n<b>Начальная цена:</b> {nnarx}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n☎️ {i.telefon}\n\n✏️ {usern}\n', parse_mode="HTML")
 
             btnsearch = types.InlineKeyboardMarkup()
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))

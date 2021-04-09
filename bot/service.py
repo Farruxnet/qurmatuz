@@ -465,7 +465,11 @@ def final(message, bot):
     import datetime
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
         try:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=message.contact.phone_number, username=message.from_user.username)
+            if '+' in message.contact.phone_number:
+                tel_check = message.contact.phone_number
+            else:
+                tel_check = '+'+message.contact.phone_number
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
             for ioz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
                 cat = ioz.category.oz
                 nar = ioz.narx
@@ -494,7 +498,11 @@ def final(message, bot):
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
 
         except:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=message.text, username=message.from_user.username)
+            if '+' in message.text:
+                tel_check2 = message.text
+            else:
+                tel_check2 = '+'+message.text
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check2, username=message.from_user.username)
             for ioz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
                 cat = ioz.category.oz
                 nar = ioz.narx
@@ -524,7 +532,11 @@ def final(message, bot):
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
         try:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=message.contact.phone_number, username=message.from_user.username)
+            if '+' in message.contact.phone_number:
+                tel_check = message.contact.phone_number
+            else:
+                tel_check = '+'+message.contact.phone_number
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
             for iuz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
                 cat = iuz.category.uz
                 nar = iuz.narx
@@ -551,7 +563,11 @@ def final(message, bot):
             bot.send_message(message.from_user.id, f'Киритган маълумотларингиз тўғрими?\n\nКатегория: {cat}, {podcat}\nБошланғич нарх: {nar}\nМошина русуми: {avto} {kub} куб\nВилоят: {viloyat}, {tuman}\nТелефон рақам: {telefon}\nТелеграм: {username}\nТариф (пакет): {paket}\n', reply_markup=done_buttonuz)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
         except:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=message.text, username=message.from_user.username)
+            if '+' in message.text:
+                tel_check2 = message.text
+            else:
+                tel_check2 = '+'+message.text
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check2, username=message.from_user.username)
             for iuz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
                 cat = iuz.category.uz
                 nar = iuz.narx
@@ -582,7 +598,11 @@ def final(message, bot):
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
         try:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=message.contact.phone_number, username=message.from_user.username)
+            if '+' in message.contact.phone_number:
+                tel_check = message.contact.phone_number
+            else:
+                tel_check = '+'+message.contact.phone_number
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
             for iru in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
                 cat = iru.category.ru
                 nar = iru.narx
@@ -609,7 +629,11 @@ def final(message, bot):
             bot.send_message(message.from_user.id, f'Правильная ли информация, которую вы ввели?\n\nКатегория: {cat}, {podcat}\nНачальная цена: {nar}\nМарка машины: {avto}, {kub} куб\nОбласть: {viloyat}, {tuman}\nНомер телефона: {telefon}\nТелеграм: {username}\nТариф (paket): {paket}\n', reply_markup=done_buttonru)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
         except:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=message.text, username=message.from_user.username)
+            if message.text in '+':
+                tel_check2 = message.text
+            else:
+                tel_check2 = '+'+message.text
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check2, username=message.from_user.username)
             for iru in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
                 cat = iru.category.ru
                 nar = iru.narx
