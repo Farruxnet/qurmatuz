@@ -26,6 +26,9 @@ def home_page(request):
     return HttpResponse("404 page not found")
 
 
+@bot.message_handler(commands=['test'])
+def test_handler(message):
+    bot.send_message(message.from_user.id, '<a href="tg://user?id=924483434">Salom</a>', parse_mode="HTML")
 
 @bot.message_handler(commands=['start'])
 def start_handler(message):
@@ -667,11 +670,11 @@ def balance(message):
     balance_button.add(types.InlineKeyboardButton(text='PAYME', url='https://payme.uz'))
 
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id)) == 'oz':
-        bot.send_message(message.from_user.id, f'Sizning hisobingizdagi balans {balance_total} so\'m\n\nHisobni to\'ldirish uchun To\'lov tizimini tanlang 👇🏻\n\n<b>PAYNET</b> orqali to\'lov qilish uchun, paynet shahobchasiga borib @qurmat_uz kanaliga to\'lov qilmoqchiman deb aytasiz va  ID raqamingizni aytib to\'lovni amalga oshirasiz!\n\nSizning ID: {TgUser.objects.get(tg_id=message.from_user.id).id}\n\nBoshqa tulov tizimlari 👇🏻', reply_markup=balance_button, parse_mode='HTML')
+        bot.send_message(message.from_user.id, f'Sizning hisobingizdagi balans {balance_total} so\'m\n\nHisobni to\'ldirish uchun To\'lov tizimini tanlang 👇🏻\n\n<b>PAYNET</b> orqali to\'lov qilish uchun, paynet shahobchasiga borib @Qooom_bot kanaliga to\'lov qilmoqchiman deb aytasiz va  ID raqamingizni aytib to\'lovni amalga oshirasiz!\n\nSizning ID: {TgUser.objects.get(tg_id=message.from_user.id).id}\n\nBoshqa tulov tizimlari 👇🏻', reply_markup=balance_button, parse_mode='HTML')
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id)) == 'uz':
-        bot.send_message(message.from_user.id, f'Сизнинг ҳисобингиздаги баланс {balance_total} сўм\n\nҲисобни тўлдириш учун Тўлов тизимини танланг 👇🏻\n\n<b>PAYNET</b> орқали тўлов қилиш учун, пайнет шаҳобчасига бориб @qurmat_uz каналига тўлов қилмоқчиман деб айтасиз ва  ИД рақамингизни айтиб тўловни амалга оширасиз!\n\nСизнинг ID: {TgUser.objects.get(tg_id=message.from_user.id).id}\n\nБошқа тулов тизимлари 👇🏻', reply_markup=balance_button, parse_mode='HTML')
+        bot.send_message(message.from_user.id, f'Сизнинг ҳисобингиздаги баланс {balance_total} сўм\n\nҲисобни тўлдириш учун Тўлов тизимини танланг 👇🏻\n\n<b>PAYNET</b> орқали тўлов қилиш учун, пайнет шаҳобчасига бориб @Qooom_bot каналига тўлов қилмоқчиман деб айтасиз ва  ИД рақамингизни айтиб тўловни амалга оширасиз!\n\nСизнинг ID: {TgUser.objects.get(tg_id=message.from_user.id).id}\n\nБошқа тулов тизимлари 👇🏻', reply_markup=balance_button, parse_mode='HTML')
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id)) == 'ru':
-        bot.send_message(message.from_user.id, f'Баланс в вашем счет {balance_total} сўм\n\nВыберите платежную систему, чтобы пополнить счет 👇🏻\n\n<b>PAYNET</b>\nЧтобы заплатить через <b>PAYNET</b>, перейдите в отделение <b>PAYNET</b>  и скажите, что хотите заплатить на канал @qurmat_uz, и произведите оплату, указав свой идентификационный номер!\n\nВаш ID: {TgUser.objects.get(tg_id=message.from_user.id).id}\n\nДругие платежные системы 👇🏻', reply_markup=balance_button, parse_mode='HTML')
+        bot.send_message(message.from_user.id, f'Баланс в вашем счет {balance_total} сўм\n\nВыберите платежную систему, чтобы пополнить счет 👇🏻\n\n<b>PAYNET</b>\nЧтобы заплатить через <b>PAYNET</b>, перейдите в отделение <b>PAYNET</b>  и скажите, что хотите заплатить на канал @Qooom_bot, и произведите оплату, указав свой идентификационный номер!\n\nВаш ID: {TgUser.objects.get(tg_id=message.from_user.id).id}\n\nДругие платежные системы 👇🏻', reply_markup=balance_button, parse_mode='HTML')
 
 
 

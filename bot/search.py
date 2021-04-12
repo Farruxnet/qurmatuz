@@ -8,7 +8,10 @@ from . service import Service
 from . models import UserSearch
 from math import ceil
 def search(message, bot):
-    if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
+
+    if (message.text == 'Назад') or (message.text == 'Orqaga') or (message.text == 'Орқага'):
+        pass
+    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
         searchobj = UserSearch()
         searchobj.tg_id = message.from_user.id
         searchobj.category = message.text
@@ -17,6 +20,7 @@ def search(message, bot):
             pod_cat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             buttons = [types.KeyboardButton(text=text.oz) for text in PodCategory.objects.filter(category=Category.objects.get(oz=UserSearch.objects.get(tg_id=message.from_user.id).category))]
             pod_cat_button.add(*buttons)
+            pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
             pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_pod1'], reply_markup=pod_cat_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_POD'])
@@ -27,6 +31,7 @@ def search(message, bot):
                     btn.append(types.KeyboardButton(text=j.oz))
                 add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
                 add_avto_replay_button.add(*btn)
+                add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
                 add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
                 bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
                 TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
@@ -43,6 +48,7 @@ def search(message, bot):
             pod_cat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             buttons = [types.KeyboardButton(text=text.uz) for text in PodCategory.objects.filter(category=Category.objects.get(uz=UserSearch.objects.get(tg_id=message.from_user.id).category))]
             pod_cat_button.add(*buttons)
+            pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
             pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_pod1'], reply_markup=pod_cat_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_POD'])
@@ -53,6 +59,7 @@ def search(message, bot):
                     btn.append(types.KeyboardButton(text=j.uz))
                 add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
                 add_avto_replay_button.add(*btn)
+                add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
                 add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
                 bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
                 TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
@@ -68,6 +75,7 @@ def search(message, bot):
             pod_cat_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             buttons = [types.KeyboardButton(text=text.ru) for text in PodCategory.objects.filter(category=Category.objects.get(ru=UserSearch.objects.get(tg_id=message.from_user.id).category))]
             pod_cat_button.add(*buttons)
+            pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
             pod_cat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_pod1'], reply_markup=pod_cat_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_POD'])
@@ -78,6 +86,7 @@ def search(message, bot):
                     btn.append(types.KeyboardButton(text=j.ru))
                 add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
                 add_avto_replay_button.add(*btn)
+                add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
                 add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
                 bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
                 TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
@@ -94,6 +103,7 @@ def search_avto_list(message, bot):
                 btn.append(types.KeyboardButton(text=j.oz))
             add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             add_avto_replay_button.add(*btn)
+            add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
             add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
@@ -107,6 +117,7 @@ def search_avto_list(message, bot):
                 btn.append(types.KeyboardButton(text=j.uz))
             add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             add_avto_replay_button.add(*btn)
+            add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
             add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
@@ -120,6 +131,7 @@ def search_avto_list(message, bot):
                 btn.append(types.KeyboardButton(text=j.ru))
             add_avto_replay_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
             add_avto_replay_button.add(*btn)
+            add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
             add_avto_replay_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto1'], reply_markup=add_avto_replay_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_AVTO_KUB'])
@@ -129,13 +141,13 @@ def search_avto_list(message, bot):
 def search_avto_kub(message, bot):
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
         UserSearch.objects.filter(tg_id=message.from_user.id).update(avto=message.text)
-
         btnkuboz = []
         kub_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
         for i in Avto.objects.all().filter(oz=message.text):
             for j in i.kub.all():
                 btnkuboz.append(types.KeyboardButton(text=str(j)))
         kub_button.add(*btnkuboz)
+        kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto_kub1'], reply_markup=kub_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_VILOYAT'])
@@ -149,6 +161,7 @@ def search_avto_kub(message, bot):
             for j in i.kub.all():
                 btnkuboz.append(types.KeyboardButton(text=str(j)))
         kub_button.add(*btnkuboz)
+        kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto_kub1'], reply_markup=kub_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_VILOYAT'])
@@ -160,6 +173,7 @@ def search_avto_kub(message, bot):
             for j in i.kub.all():
                 btnkuboz.append(types.KeyboardButton(text=str(j)))
         kub_button.add(*btnkuboz)
+        kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         kub_button.add(types.KeyboardButton(text=LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_avto_kub1'], reply_markup=kub_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_VILOYAT'])
@@ -173,6 +187,7 @@ def search_viloyat(message, bot):
             btn.append(types.KeyboardButton(text=i.oz))
 
         viloyat_button.add(*btn)
+        viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_viloyat1'], reply_markup=viloyat_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_TUMAN'])
@@ -185,6 +200,7 @@ def search_viloyat(message, bot):
             btn.append(types.KeyboardButton(text=i.uz))
 
         viloyat_button.add(*btn)
+        viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_viloyat1'], reply_markup=viloyat_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_TUMAN'])
@@ -196,6 +212,7 @@ def search_viloyat(message, bot):
             btn.append(types.KeyboardButton(text=i.ru))
 
         viloyat_button.add(*btn)
+        viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         viloyat_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_viloyat1'], reply_markup=viloyat_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_TUMAN'])
@@ -208,6 +225,7 @@ def search_tuman(message, bot):
             btn.append(types.KeyboardButton(text=j.oz))
         tuman_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
         tuman_button.add(*btn)
+        tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_tuman1'], reply_markup=tuman_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_RESULT'])
@@ -218,6 +236,7 @@ def search_tuman(message, bot):
             btn.append(types.KeyboardButton(text=j.uz))
         tuman_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
         tuman_button.add(*btn)
+        tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_tuman1'], reply_markup=tuman_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_RESULT'])
@@ -228,6 +247,7 @@ def search_tuman(message, bot):
             btn.append(types.KeyboardButton(text=j.ru))
         tuman_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
         tuman_button.add(*btn)
+        tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['back']))
         tuman_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[ Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['search_tuman1'], reply_markup=tuman_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['SEARCH_RESULT'])
@@ -268,7 +288,7 @@ def search_result(message, bot):
             btnsearch.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'search_{search_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 /  {ceil(len(search_obj)/Service.get_count(Config.objects.all()))})', reply_markup=btnsearch)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
-            
+
         else:
             bot.send_message(message.from_user.id, 'Siz kiritgan ma\'lumotlar bo\'yicha topilmadi')
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])

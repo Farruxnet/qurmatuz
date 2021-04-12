@@ -5,8 +5,14 @@ import telebot
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 bot = telebot.TeleBot(settings.BOT_TOKEN)
+
 def home_page(request):
-    return HttpResponse('404 PAGE NOT FOUND')
+    return redirect('https://t.me/')
+
+def request_detect(request):
+    bot.send_message(313578337, 'HI')
+    return HttpResponse('404')
+
 
 @login_required
 def messages(request):

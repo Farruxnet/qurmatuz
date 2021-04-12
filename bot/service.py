@@ -413,7 +413,7 @@ def narx(message, bot):
         narx_button.add(*btnnarx)
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['kelishilgan']))
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price']+'So\'m', reply_markup=narx_button)
+        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price'], reply_markup=narx_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_TEL'])
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
@@ -426,7 +426,7 @@ def narx(message, bot):
         narx_button.add(*btnnarx)
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['kelishilgan']))
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price']+'So\'m', reply_markup=narx_button)
+        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price'], reply_markup=narx_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_TEL'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
         for j in Paket.objects.filter(name_ru=message.text):
@@ -438,7 +438,7 @@ def narx(message, bot):
         narx_button.add(*btnnarx)
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['kelishilgan']))
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price']+' So\'m', reply_markup=narx_button)
+        bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price'], reply_markup=narx_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_TEL'])
 
 def get_tel(message, bot):
@@ -661,21 +661,27 @@ def final(message, bot):
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
 
 
-
-
 def check(message, bot):
     if message.text == LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']:
         bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['success_add'], reply_markup=home_func(message))
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
-        if int(TgUser.objects.filter(tg_id=message.from_user.id)[0].balance) >= int(Paket.objects.filter(id=UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=False)[0].paket_id)[0].price):
+        bot.send_message(message.from_user.id, '01')
+
+        if int(TgUser.objects.get(tg_id=message.from_user.id).balance) >= int(Paket.objects.get(id=UserCart.objects.get(user__tg_id=message.from_user.id, status=False, status_check=False).paket_id).price):
             from django.db.models import F
-            TgUser.objects.filter(tg_id=message.from_user.id).update(balance=F('balance') - int(Paket.objects.filter(id=UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=True)[0].paket_id)[0].price))
+            bot.send_message(message.from_user.id, '00')
+
+            TgUser.objects.filter(tg_id=message.from_user.id).update(balance=F('balance') - int(Paket.objects.get(id=UserCart.objects.get(user__tg_id=message.from_user.id, status=False, status_check=False).paket_id).price))
+            bot.send_message(message.from_user.id, '0')
+
             UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=False).update(status=True)
+            bot.send_message(message.from_user.id, '1')
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
+            bot.send_message(message.from_user.id, '2')
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['activ_ok'])
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
         else:
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['act'])
             UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['act'])
 
 
 
@@ -692,8 +698,6 @@ def check(message, bot):
             bot.send_message(message.from_user.id, "XATOLIK", reply_markup=home_func(message))
         except:
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
-
-
 
 
 
