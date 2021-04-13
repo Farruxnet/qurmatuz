@@ -39,7 +39,7 @@ class UserCart(models.Model):
     date = models.DateTimeField(default=timezone.now, verbose_name='Qo\'shilgan vaqti')
     deatline = models.DateTimeField(default=timezone.now() + datetime.timedelta(days=1), verbose_name='Amal qilish vaqti')
     status = models.BooleanField(default=False, verbose_name='Holati')
-    status_check = models.BooleanField(default=False, verbose_name='To\'liq emas e\'lon')
+    status_check = models.BooleanField(default=False, verbose_name='To\'liq emas e\'lon (bunga teginilmasin!)')
 
     class Meta:
         verbose_name = "Foydalanuvchilar e\'lonlari"

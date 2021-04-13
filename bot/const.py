@@ -27,6 +27,7 @@ USER_STEP = {
 
 LAN = {
     'oz':{
+        'delete': 'O\'chirish',
         'active': 'Faollashtirilgan',
         'act': 'Sizning hisobingizda mablag\' etarli emas! Hisobingizni mablag\' bilan to\'ldiring va \"Mening e\'lonlarim\" bo\'limida e\'loningizni faollashtiring. ',
         'balance_not': 'Hisobingizda mablag\' yetarli emas',
@@ -80,6 +81,7 @@ LAN = {
     },
 
     'ru':{
+        'delete': 'Удалить',
         'active': 'Активирован',
         'act': 'На вашем счету недостаточно денег! Пополните счет и активируйте свою рекламу в разделе «Мои объявления».',
         'balance_not': 'На вашем счету недостаточно денег',
@@ -133,6 +135,7 @@ LAN = {
     },
 
     'uz':{
+        'delete': 'Ўчириш',
         'active': 'Фаоллаштирилган',
         'balance_not': 'Ҳисобингизда маблағ етарли эмас',
         'activ_ok': 'Фаоллаштирилди',

@@ -45,6 +45,7 @@ def start_handler(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def characters_page_callback(call):
+    print(call.data)
     if Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id)) == 'oz':
         if (call.data).split('_')[0] == 'activ':
             if UserCart.objects.filter(id=(call.data).split('_')[1], user__tg_id=call.message.chat.id, status=True, status_check=True):
@@ -57,6 +58,14 @@ def characters_page_callback(call):
                     bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Faollashtirildi')
                 else:
                     bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Hisobingizda mablag\' yetarli emas')
+
+        elif (call.data).split('_')[0] == 'delete':
+            try:
+                UserCart.objects.filter(user__tg_id=call.message.chat.id, id=(call.data).split('_')[1]).delete()
+                bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='O\'chirildi')
+            except:
+                bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Xatolik. Bunday e\'lon mavjud emas yoki o\'chirilgan')
+
 
         elif (call.data).split('_')[0] == 'search':
             if PodCategory.objects.filter(oz=UserSearch.objects.get(tg_id=call.message.chat.id).podcategory):
@@ -82,7 +91,7 @@ def characters_page_callback(call):
                     else:
                         una = i.telefon
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'search_{post_object.previous_page_number()}'))
@@ -105,7 +114,7 @@ def characters_page_callback(call):
                     else:
                         una = i.telefon
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btuz1 = types.InlineKeyboardMarkup()
@@ -128,7 +137,7 @@ def characters_page_callback(call):
                         una = '@'+i.username
                     else:
                         una = i.telefon
-                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btuz1 = types.InlineKeyboardMarkup()
@@ -159,7 +168,8 @@ def characters_page_callback(call):
                         st = '🔴 Faollashtirilmagan'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nKategoriya: {i.category.oz}, {pca}\nBoshlang\'ich narx: {pna}\nMoshina rusumi: {i.avto.oz} {i.kub} kub\nViloyat: {i.viloyat.oz}, {i.tuman.oz}\nTelefon raqam: {i.telefon}\nTelegram: {una}\nTarif (paket): {i.paket.name_oz}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n<b>Tarif (paket):</b> {i.paket.name_oz}\n\n✏️ {una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'post_{post_object.previous_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -186,7 +196,8 @@ def characters_page_callback(call):
                         st = '🔴 Faollashtirilmagan'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nKategoriya: {i.category.oz}, {pca}\nBoshlang\'ich narx: {pna}\nMoshina rusumi: {i.avto.oz} {i.kub} kub\nViloyat: {i.viloyat.oz}, {i.tuman.oz}\nTelefon raqam: {i.telefon}\nTelegram: {una}\nTarif (paket): {i.paket.name_oz}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n<b>Tarif (paket):</b> {i.paket.name_oz}\n\n✏️ {una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next'], callback_data=f'post_{post_object.next_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -213,7 +224,8 @@ def characters_page_callback(call):
                         st = '🔴 Faollashtirilmagan'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nKategoriya: {i.category.oz}, {pca}\nBoshlang\'ich narx: {pna}\nMoshina rusumi: {i.avto.oz} {i.kub} kub\nViloyat: {i.viloyat.oz}, {i.tuman.oz}\nTelefon raqam: {i.telefon}\nTelegram: {una}\nTarif (paket): {i.paket.name_oz}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n<b>Tarif (paket):</b> {i.paket.name_oz}\n\n✏️ {una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'post_{post_object.previous_page_number()}'), types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next_to'], callback_data=f'post_{post_object.next_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -230,6 +242,13 @@ def characters_page_callback(call):
                     bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Фаоллаштирилди')
                 else:
                     bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Ҳисобингизда маблағ етарли эмас')
+        elif (call.data).split('_')[0] == 'delete':
+            try:
+                UserCart.objects.filter(user__tg_id=call.message.chat.id, id=(call.data).split('_')[1]).delete()
+                bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Ўчирилди')
+            except:
+                bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Хатолик. Бундай эълон мавжуд эмас ёки ўчирилган')
+
         elif (call.data).split('_')[0] == 'search':
             if PodCategory.objects.filter(uz=UserSearch.objects.get(tg_id=call.message.chat.id).podcategory):
                 search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(uz=UserSearch.objects.get(tg_id=call.message.chat.id).tuman).id, viloyat=Viloyat.objects.get(uz=UserSearch.objects.get(tg_id=call.message.chat.id).viloyat).id, avto=Avto.objects.get(uz=UserSearch.objects.get(tg_id=call.message.chat.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=call.message.chat.id).avtokub).id, podcategory=PodCategory.objects.get(uz=UserSearch.objects.get(tg_id=call.message.chat.id).podcategory).id, category=Category.objects.get(uz=UserSearch.objects.get(tg_id=call.message.chat.id).category).id).order_by('-id')
@@ -254,7 +273,7 @@ def characters_page_callback(call):
                     else:
                         una = i.telefon
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btuz1 = types.InlineKeyboardMarkup()
@@ -278,7 +297,7 @@ def characters_page_callback(call):
                     else:
                         una = i.telefon
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next'], callback_data=f'search_{post_object.next_page_number()}'))
@@ -300,7 +319,7 @@ def characters_page_callback(call):
                         una = '@'+i.username
                     else:
                         una = i.telefon
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'search_{post_object.previous_page_number()}'), types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next_to'], callback_data=f'search_{post_object.next_page_number()}'))
@@ -330,7 +349,8 @@ def characters_page_callback(call):
                         st = '🔴 Фаоллаштирилмаган'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nКатегория: {i.category.uz}, {pca}\nБошланғич нарх: {pna}\nМошина русуми: {i.avto.uz}, {i.kub} куб\nВилоят: {i.viloyat.uz}, {i.tuman.uz}\nТелефон рақам: {i.telefon}\nТелеграм: {una}\nТариф (пакет): {i.paket.name_uz}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\nТариф (пакет): {i.paket.name_uz}\n\n✏️{una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'post_{post_object.previous_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -357,7 +377,9 @@ def characters_page_callback(call):
                         st = '🔴 Фаоллаштирилмаган'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nКатегория: {i.category.uz}, {pca}\nБошланғич нарх: {pna}\nМошина русуми: {i.avto.uz}, {i.kub} куб\nВилоят: {i.viloyat.uz}, {i.tuman.uz}\nТелефон рақам: {i.telefon}\nТелеграм: {una}\nТариф (пакет): {i.paket.name_uz}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\nТариф (пакет): {i.paket.name_uz}\n\n✏️{una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
+
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next'], callback_data=f'post_{post_object.next_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -384,7 +406,9 @@ def characters_page_callback(call):
                         st = '🔴 Фаоллаштирилмаган'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nКатегория: {i.category.uz}, {pca}\nБошланғич нарх: {pna}\nМошина русуми: {i.avto.uz}, {i.kub} куб\nВилоят: {i.viloyat.uz}, {i.tuman.uz}\nТелефон рақам: {i.telefon}\nТелеграм: {una}\nТариф (пакет): {i.paket.name_uz}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\nТариф (пакет): {i.paket.name_uz}\n\n✏️{una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
+
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'post_{post_object.previous_page_number()}'), types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next_to'], callback_data=f'post_{post_object.next_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -400,6 +424,13 @@ def characters_page_callback(call):
                     bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Активирован')
                 else:
                     bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='На вашем счету недостаточно денег')
+        elif (call.data).split('_')[0] == 'delete':
+            try:
+                UserCart.objects.filter(user__tg_id=call.message.chat.id, id=(call.data).split('_')[1]).delete()
+                bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Удалено')
+            except:
+                bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text='Ошибка. Такое объявление не существует или удалено')
+
         elif (call.data).split('_')[0] == 'search':
             if PodCategory.objects.filter(ru=UserSearch.objects.get(tg_id=call.message.chat.id).podcategory):
                 search_obj = UserCart.objects.filter(status=1, tuman=Tuman.objects.get(ru=UserSearch.objects.get(tg_id=call.message.chat.id).tuman).id, viloyat=Viloyat.objects.get(ru=UserSearch.objects.get(tg_id=call.message.chat.id).viloyat).id, avto=Avto.objects.get(ru=UserSearch.objects.get(tg_id=call.message.chat.id).avto).id, kub=AvtoKub.objects.get(kub=UserSearch.objects.get(tg_id=call.message.chat.id).avtokub).id, podcategory=PodCategory.objects.get(ru=UserSearch.objects.get(tg_id=call.message.chat.id).podcategory).id, category=Category.objects.get(ru=UserSearch.objects.get(tg_id=call.message.chat.id).category).id).order_by('-id')
@@ -425,7 +456,7 @@ def characters_page_callback(call):
                         una = i.telefon
 
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btru1 = types.InlineKeyboardMarkup()
@@ -449,7 +480,7 @@ def characters_page_callback(call):
                     else:
                         una = i.telefon
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btru1 = types.InlineKeyboardMarkup()
@@ -472,7 +503,7 @@ def characters_page_callback(call):
                         una = '@'+i.username
                     else:
                         una = i.telefon
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n☎️ {i.telefon}\n\n✏️ {una}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btru1 = types.InlineKeyboardMarkup()
@@ -503,7 +534,8 @@ def characters_page_callback(call):
                         st = '🔴 Не активирован'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nКатегория: {i.category.ru}, {pca}\nНачальная цена: {pna}\nМарка машины: {i.avto.ru}, {i.kub} куб\nОбласть: {i.viloyat.ru}, {i.tuman.ru}\nНомер телефона: {i.telefon}\nТелеграм: {una}\nТариф (пакет): {i.paket.name_ru}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n<b>Тариф (пакет):</b> {i.paket.name_ru}\n\n✏️ {una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'post_{post_object.previous_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -530,7 +562,9 @@ def characters_page_callback(call):
                         st = '🔴 Не активирован'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nКатегория: {i.category.ru}, {pca}\nНачальная цена: {pna}\nМарка машины: {i.avto.ru}, {i.kub} куб\nОбласть: {i.viloyat.ru}, {i.tuman.ru}\nНомер телефона: {i.telefon}\nТелеграм: {una}\nТариф (пакет): {i.paket.name_ru}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n<b>Тариф (пакет):</b> {i.paket.name_ru}\n\n✏️ {una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
+
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next'], callback_data=f'post_{post_object.next_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -557,7 +591,9 @@ def characters_page_callback(call):
                         st = '🔴 Не активирован'
                     activ_button = types.InlineKeyboardMarkup(row_width=1)
                     activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['activ'], callback_data=f'activ_{i.id}'))
-                    bot.send_message(call.message.chat.id, f'\nКатегория: {i.category.ru}, {pca}\nНачальная цена: {pna}\nМарка машины: {i.avto.ru}, {i.kub} куб\nОбласть: {i.viloyat.ru}, {i.tuman.ru}\nНомер телефона: {i.telefon}\nТелеграм: {una}\nТариф (пакет): {i.paket.name_ru}\n\n{st}', reply_markup=activ_button)
+                    activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['delete'], callback_data=f'delete_{i.id}'))
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n<b>Тариф (пакет):</b> {i.paket.name_ru}\n\n✏️ {una}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
+
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'post_{post_object.previous_page_number()}'), types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next_to'], callback_data=f'post_{post_object.next_page_number()}'))
                 bot.send_message(call.message.chat.id, f'({call.data.split("_")[1]} / {ceil(UserCart.objects.filter(user__tg_id=call.message.chat.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz1)
@@ -590,10 +626,10 @@ def send_profile(message):
                 else:
                     st = '🔴 Faollashtirilmagan'
 
-
                 activ_button = types.InlineKeyboardMarkup()
                 activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['activ'], callback_data=f'activ_{i.id}'))
-                bot.send_message(message.from_user.id, f'\nKategoriya: {i.category.oz}, {pcat}\nBoshlang\'ich narx: {nnarx}\nMoshina rusumi: {i.avto.oz}, {i.kub} kub\nViloyat: {i.viloyat.oz}, {i.tuman.oz}\nTelefon raqam: {i.telefon}\nTelegram: {usern}\nTarif (paket): {i.paket.name_oz}\n\n{st}', reply_markup=activ_button)
+                activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['delete'], callback_data=f'delete_{i.id}'))
+                bot.send_message(message.from_user.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pcat}\n<b>Boshlang\'ich narx:</b> {nnarx}\n<b>Moshina rusumi:</b> {i.avto.oz}, {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n<b>Tarif (paket):</b> {i.paket.name_oz}\n\n✏️ {usern}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
             btuz.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'post_{post_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 / {ceil(UserCart.objects.filter(user__tg_id=message.from_user.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz)
 
@@ -622,7 +658,8 @@ def send_profile(message):
 
                 activ_button = types.InlineKeyboardMarkup()
                 activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['activ'], callback_data=f'activ_{i.id}'))
-                bot.send_message(message.from_user.id, f'\nКатегория: {i.category.uz}, {pcat}\nБошланғич нарх: {nnarx}\nМошина русуми: {i.avto.uz}, {i.kub} куб\nВилоят: {i.viloyat.uz}, {i.tuman.uz}\nТелефон рақам: {i.telefon}\nТелеграм: {usern}\nТариф (пакет): {i.paket.name_uz}\n\n{st}', reply_markup=activ_button)
+                activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['delete'], callback_data=f'delete_{i.id}'))
+                bot.send_message(message.from_user.id, f'\n<b>Категория:</b> {i.category.uz}, {pcat}\n<b>Бошланғич нарх:</b> {nnarx}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n<b>Тариф (пакет):</b> {i.paket.name_uz}\n\n✏️ {usern}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
             btuz.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'post_{post_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 / {ceil(UserCart.objects.filter(user__tg_id=message.from_user.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz)
 
@@ -650,7 +687,8 @@ def send_profile(message):
                     st = '🔴 Не активирован'
                 activ_button = types.InlineKeyboardMarkup()
                 activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['activ'], callback_data=f'activ_{i.id}'))
-                bot.send_message(message.from_user.id, f'\nКатегория: {i.category.ru}, {pcat}\nНачальная цена: {nnarx}\nМарка машины: {i.avto.ru}, {i.kub} куб\nОбласть: {i.viloyat.ru}, {i.tuman.ru}\nНомер телефона: {i.telefon}\nТелеграм: {usern}\nТариф (пакет): {i.paket.name_ru}\n\n{st}', reply_markup=activ_button)
+                activ_button.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['delete'], callback_data=f'delete_{i.id}'))
+                bot.send_message(message.from_user.id, f'\n<b>Категория:</b> {i.category.ru}, {pcat}\n<b>Начальная цена:</b> {nnarx}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n<b>Тариф (пакет):</b> {i.paket.name_ru}\n\n✏️ {usern}\n\n☎️ {i.telefon}\n\n{st}', reply_markup=activ_button, parse_mode="HTML")
             btuz.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['next_to'], callback_data=f'post_{post_object.next_page_number()}'))
             bot.send_message(message.from_user.id, f'(1 / {ceil(UserCart.objects.filter(user__tg_id=message.from_user.id).count()/Service.get_count(Config.objects.all()))})', reply_markup=btuz)
 
@@ -771,6 +809,7 @@ def get_edit_lan(message):
     lan_button.add((types.KeyboardButton(text='🇺🇿 O\'zbek')), (types.KeyboardButton(text='🇺🇿 Узбек')), (types.KeyboardButton(text='🇷🇺 Руский')))
     lan_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['back']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['home']))
     bot.send_message(message.chat.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.chat.id))]['edit_lan'], reply_markup=lan_button)
+
 
 @bot.message_handler(func=lambda msg: msg.text == LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=msg.chat.id))]['search'])
 def get_search(message):
