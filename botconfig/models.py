@@ -61,7 +61,7 @@ class Tuman(models.Model):
         verbose_name_plural = "Tumanlar"
 
 class AvtoKub(models.Model):
-    kub = models.IntegerField(verbose_name='Avtomobil sig\'imi')
+    kub = models.CharField(max_length=10, verbose_name='Avtomobil sig\'imi')
     def __str__(self):
         return str(self.kub)
     class Meta:
@@ -83,6 +83,7 @@ class Category(models.Model):
     oz = models.CharField(max_length=80, null=True, blank=True, unique=True, verbose_name='O\'zbek')
     uz = models.CharField(max_length=80, null=True, blank=True, unique=True, verbose_name='Krill')
     ru = models.CharField(max_length=80, null=True, blank=True, unique=True, verbose_name='Rus')
+
     def __str__(self):
         return str(self.oz)
     class Meta:

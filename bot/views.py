@@ -13,6 +13,9 @@ bot = telebot.TeleBot(settings.BOT_TOKEN)
 import logging
 logging.basicConfig(filename="adas.log", format=' %(asctime)s - %(levelname)s - %(message)s')
 logging.info('Session Start')
+# random list
+# nazad qo'shaman
+# rasm yuborish qo'shish
 
 def web_hook(request):
     if request.method == "POST":
@@ -89,9 +92,10 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz}\n<b>Hajm:</b> {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}\n<b>Tuman: </b>{i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'search_{post_object.previous_page_number()}'))
@@ -112,9 +116,11 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz}\n<b>Hajm:</b> {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}\n<b>Tuman: </b>{i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
 
 
                 btuz1 = types.InlineKeyboardMarkup()
@@ -136,8 +142,10 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
-                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz} {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}, {i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
+
+                    bot.send_message(call.message.chat.id, f'\n<b>Kategoriya:</b> {i.category.oz}, {pca}\n\n<b>Boshlang\'ich narx:</b> {pna}\n<b>Moshina rusumi:</b> {i.avto.oz}\n<b>Hajm:</b> {i.kub} kub\n<b>Viloyat:</b> {i.viloyat.oz}\n<b>Tuman: </b>{i.tuman.oz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
 
 
                 btuz1 = types.InlineKeyboardMarkup()
@@ -161,7 +169,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Faollashtirilgan'
                     else:
@@ -189,7 +197,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Faollashtirilgan'
                     else:
@@ -217,7 +225,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Faollashtirilgan'
                     else:
@@ -271,9 +279,9 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}\n<b>Хажм:</b> {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}\n<b>Туман:</b> {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btuz1 = types.InlineKeyboardMarkup()
@@ -295,9 +303,10 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}\n<b>Хажм:</b> {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}\n<b>Туман:</b> {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
 
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.add(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next'], callback_data=f'search_{post_object.next_page_number()}'))
@@ -318,8 +327,9 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}, {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}, {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.uz}, {pca}\n\n<b>Бошланғич нарх:</b> {pna}\n<b>Мошина русуми:</b> {i.avto.uz}\n<b>Хажм:</b> {i.kub} куб\n<b>Вилоят:</b> {i.viloyat.uz}\n<b>Туман:</b> {i.tuman.uz}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
 
                 btuz1 = types.InlineKeyboardMarkup()
                 btuz1.row(types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['prev'], callback_data=f'search_{post_object.previous_page_number()}'), types.InlineKeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=call.message.chat.id))]['next_to'], callback_data=f'search_{post_object.next_page_number()}'))
@@ -342,7 +352,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Фаоллаштирилган'
                     else:
@@ -370,7 +380,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Фаоллаштирилган'
                     else:
@@ -399,7 +409,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Фаоллаштирилган'
                     else:
@@ -453,10 +463,10 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
 
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}\n<b>Вместимость:</b> {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}\n<b>Район:</b> {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
 
 
                 btru1 = types.InlineKeyboardMarkup()
@@ -478,9 +488,10 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
 
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}\n<b>Вместимость:</b> {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}\n<b>Район:</b> {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
 
 
                 btru1 = types.InlineKeyboardMarkup()
@@ -502,8 +513,9 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
-                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}, {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}, {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
+                    bot.send_message(call.message.chat.id, f'\n<b>Категория:</b> {i.category.ru}, {pca}\n\n<b>Начальная цена:</b> {pna}\n<b>Марка машины:</b> {i.avto.ru}\n<b>Вместимость:</b> {i.kub} куб\n<b>Область:</b> {i.viloyat.ru}\n<b>Район:</b> {i.tuman.ru}\n\n✏️ {una}\n\n☎️ {i.telefon}', parse_mode="HTML")
+
 
 
                 btru1 = types.InlineKeyboardMarkup()
@@ -527,7 +539,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Активирован'
                     else:
@@ -555,7 +567,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Активирован'
                     else:
@@ -584,7 +596,7 @@ def characters_page_callback(call):
                     if i.username:
                         una = '@'+i.username
                     else:
-                        una = i.telefon
+                        una = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                     if i.status:
                         st = '🟢 Активирован'
                     else:
@@ -620,7 +632,7 @@ def send_profile(message):
                 if i.username:
                     usern = '@'+i.username
                 else:
-                    usern = i.telefon
+                    usern = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                 if i.status:
                     st = '🟢 Faollashtirilgan'
                 else:
@@ -650,7 +662,7 @@ def send_profile(message):
                 if i.username:
                     usern = '@'+i.username
                 else:
-                    usern = i.telefon
+                    usern = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                 if i.status:
                     st = '🟢 Фаоллаштирилган'
                 else:
@@ -680,7 +692,7 @@ def send_profile(message):
                 if i.username:
                     usern = '@'+i.username
                 else:
-                    usern = i.telefon
+                    usern = '<a href="tg://user?id={0}">{1}</a>'.format(i.user.tg_id, i.user)
                 if i.status:
                     st = '🟢 Активирован'
                 else:
@@ -897,11 +909,12 @@ def text_handler(message):
         USER_STEP['GET_KUB']: get_avto_kub,
         USER_STEP['GET_VILOYAT']: get_viloyat,
         USER_STEP['GET_TUMAN']: tuman,
-        USER_STEP['GET_NARX']: paket,
+        USER_STEP['GET_NARX']: narx,
         USER_STEP['GET_TEL']: get_tel,
         USER_STEP['GET_N']: narx,
-        USER_STEP['CHECK']: check,
+        USER_STEP['CHECK']: paket_get,
         USER_STEP['FINAL']: final,
+        USER_STEP['DONE']: check,
         #### search ####
         USER_STEP['SEARCH']: search,
         USER_STEP['SEARCH_AVTO_KUB']: search_avto_kub,

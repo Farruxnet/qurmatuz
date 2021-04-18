@@ -8,6 +8,21 @@ from botconfig.models import PodCategory, Category, Avto, AvtoKub, Viloyat, Tuma
 # 2 - deatline delete server orqali bash script bilan
 
 class Service:
+    def filter_number(txt):
+        number = ''
+        for s in txt:
+            if s.isdigit():
+                number += s
+        if len(number) == 12:
+            number = '+'+number
+        elif len(number) == 9:
+            number = '+998'+number
+        elif len(number) == 10:
+            number = '+99'+number
+        else:
+            number = number
+        return number
+
     def get_user_lan(object):
         id = 0
         for i in object:
@@ -351,52 +366,6 @@ def tuman(message, bot):
         except:
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
 
-def paket(message, bot):
-    if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
-        try:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(tuman=Tuman.objects.get(oz=message.text))
-            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            btntel = []
-            for i in Paket.objects.all():
-                btntel.append(types.KeyboardButton(text=i.name_oz))
-            paket_button.add(*btntel)
-            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
-            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_N'])
-        except:
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
-
-    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        try:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(tuman=Tuman.objects.get(uz=message.text))
-            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            btntel = []
-            for i in Paket.objects.all():
-                btntel.append(types.KeyboardButton(text=i.name_uz))
-            paket_button.add(*btntel)
-            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
-            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_N'])
-
-        except:
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
-
-    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        try:
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(tuman=Tuman.objects.get(ru=message.text))
-            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            btntel = []
-            for i in Paket.objects.all():
-                btntel.append(types.KeyboardButton(text=i.name_ru))
-            paket_button.add(*btntel)
-            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
-            TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_N'])
-
-        except:
-            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['error'])
-
-
 
 
 
@@ -404,8 +373,9 @@ def narx(message, bot):
     import datetime
     from django.utils import timezone
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
-        for j in Paket.objects.filter(name_oz=message.text):
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        # for j in Paket.objects.filter(name_oz=message.text):
+        #     UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(tuman=Tuman.objects.get(oz=message.text))
         btnnarx = []
         for narx in StartNarx.objects.all():
             btnnarx.append(types.KeyboardButton(text=narx.narx))
@@ -417,8 +387,9 @@ def narx(message, bot):
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_TEL'])
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
-        for j in Paket.objects.filter(name_uz=message.text):
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        # for j in Paket.objects.filter(name_uz=message.text):
+        #     UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(tuman=Tuman.objects.get(uz=message.text))
         btnnarx = []
         for narx in StartNarx.objects.all():
             btnnarx.append(types.KeyboardButton(text=narx.narx))
@@ -429,8 +400,9 @@ def narx(message, bot):
         bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price'], reply_markup=narx_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_TEL'])
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
-        for j in Paket.objects.filter(name_ru=message.text):
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        # for j in Paket.objects.filter(name_ru=message.text):
+        #     UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(tuman=Tuman.objects.get(ru=message.text))
         btnnarx = []
         for narx in StartNarx.objects.all():
             btnnarx.append(types.KeyboardButton(text=narx.narx))
@@ -440,6 +412,12 @@ def narx(message, bot):
         narx_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
         bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['start_price'], reply_markup=narx_button)
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['GET_TEL'])
+
+
+
+
+
+
 
 def get_tel(message, bot):
     try:
@@ -461,6 +439,7 @@ def get_tel(message, bot):
 
 
 
+
 def final(message, bot):
     import datetime
     if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
@@ -469,65 +448,26 @@ def final(message, bot):
                 tel_check = message.contact.phone_number
             else:
                 tel_check = '+'+message.contact.phone_number
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
-            for ioz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
-                cat = ioz.category.oz
-                nar = ioz.narx
-                if ioz.podcategory:
-                    podcat =  ioz.podcategory.oz
-                else:
-                    podcat = ''
-                if ioz.narx:
-                    nar = ioz.narx
-                else:
-                    nar = 'Kelishilgan narx'
-                if ioz.username:
-                    username = '@'+ioz.username
-                else:
-                    username = ioz.telefon
-                avto = ioz.avto.oz
-                kub = ioz.kub
-                viloyat = ioz.viloyat.oz
-                tuman = ioz.tuman.oz
-                telefon = ioz.telefon
-                paket = ioz.paket.name_oz
-            done_buttonoz = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            done_buttonoz.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
-            bot.send_message(message.from_user.id, f'Kiritgan ma\'lumotlaringiz to\'g\'rimi?\n\nKategoriya: {cat}, {podcat}\nBoshlang\'ich narx: {nar}\nMoshina rusumi: {avto} {kub} kub\nViloyat: {viloyat}, {tuman}\nTelefon raqam: {telefon}\nTelegram: {username}\nTarif (paket): {paket}\n', reply_markup=done_buttonoz)
 
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
+            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            btntel = []
+            for i in Paket.objects.all():
+                btntel.append(types.KeyboardButton(text=i.name_oz))
+            paket_button.add(*btntel)
+            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
 
         except:
-            if '+' in message.text:
-                tel_check2 = message.text
-            else:
-                tel_check2 = '+'+message.text
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check2, username=message.from_user.username)
-            for ioz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
-                cat = ioz.category.oz
-                nar = ioz.narx
-                if ioz.podcategory:
-                    podcat =  ioz.podcategory.oz
-                else:
-                    podcat = ''
-                if ioz.narx:
-                    nar = ioz.narx
-                else:
-                    nar = 'Kelishilgan narx'
-                if ioz.username:
-                    username = '@'+ioz.username
-                else:
-                    username = ioz.telefon
-                avto = ioz.avto.oz
-                kub = ioz.kub
-                viloyat = ioz.viloyat.oz
-                tuman = ioz.tuman.oz
-                telefon = ioz.telefon
-                paket = ioz.paket.name_oz
-
-            done_buttonoz = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            done_buttonoz.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
-            bot.send_message(message.from_user.id, f'Kiritgan ma\'lumotlaringiz to\'g\'rimi?\n\nKategoriya: {cat}, {podcat}\nBoshlang\'ich narx: {nar}\nMoshina rusumi: {avto} {kub} kub\nViloyat: {viloyat}, {tuman}\nTelefon raqam: {telefon}\nTelegram: {username}\nTarif (paket): {paket}\n', reply_markup=done_buttonoz)
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=Service.filter_number(message.text), username=message.from_user.username)
+            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            btntel = []
+            for i in Paket.objects.all():
+                btntel.append(types.KeyboardButton(text=i.name_oz))
+            paket_button.add(*btntel)
+            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
@@ -537,64 +477,26 @@ def final(message, bot):
             else:
                 tel_check = '+'+message.contact.phone_number
             UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
-            for iuz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
-                cat = iuz.category.uz
-                nar = iuz.narx
-                if iuz.podcategory:
-                    podcat =  iuz.podcategory.uz
-                else:
-                    podcat = ''
-                if iuz.narx:
-                    nar = iuz.narx
-                else:
-                    nar = 'Келишилган нарх'
-                if iuz.username:
-                    username = '@'+iuz.username
-                else:
-                    username = iuz.telefon
-                avto = iuz.avto.uz
-                kub = iuz.kub
-                viloyat = iuz.viloyat.uz
-                tuman = iuz.tuman.uz
-                telefon = iuz.telefon
-                paket = iuz.paket.name_uz
-            done_buttonuz = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            done_buttonuz.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
-            bot.send_message(message.from_user.id, f'Киритган маълумотларингиз тўғрими?\n\nКатегория: {cat}, {podcat}\nБошланғич нарх: {nar}\nМошина русуми: {avto} {kub} куб\nВилоят: {viloyat}, {tuman}\nТелефон рақам: {telefon}\nТелеграм: {username}\nТариф (пакет): {paket}\n', reply_markup=done_buttonuz)
+            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            btntel = []
+            for i in Paket.objects.all():
+                btntel.append(types.KeyboardButton(text=i.name_uz))
+            paket_button.add(*btntel)
+            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
+
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
         except:
-            if '+' in message.text:
-                tel_check2 = message.text
-            else:
-                tel_check2 = '+'+message.text
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check2, username=message.from_user.username)
-            for iuz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
-                cat = iuz.category.uz
-                nar = iuz.narx
-                if iuz.podcategory:
-                    podcat =  iuz.podcategory.uz
-                else:
-                    podcat = ''
-                if iuz.narx:
-                    nar = iuz.narx
-                else:
-                    nar = 'Келишилган нарх'
-                if iuz.username:
-                    username = '@'+iuz.username
-                else:
-                    username = iuz.telefon
-                avto = iuz.avto.uz
-                kub = iuz.kub
-                viloyat = iuz.viloyat.uz
-                tuman = iuz.tuman.uz
-                telefon = iuz.telefon
-                paket = iuz.paket.name_uz
-            done_buttonuz = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            done_buttonuz.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
-            bot.send_message(message.from_user.id, f'Киритган маълумотларингиз тўғрими?\n\nКатегория: {cat}, {podcat}\nБошланғич нарх: {nar}\nМошина русуми: {avto} {kub} куб\nВилоят: {viloyat}, {tuman}\nТелефон рақам: {telefon}\nТелеграм: {username}\nТариф (пакет): {paket}\n', reply_markup=done_buttonuz)
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=Service.filter_number(message.text), username=message.from_user.username)
+            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            btntel = []
+            for i in Paket.objects.all():
+                btntel.append(types.KeyboardButton(text=i.name_uz))
+            paket_button.add(*btntel)
+            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
+
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
-
-
 
     elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
         try:
@@ -603,81 +505,126 @@ def final(message, bot):
             else:
                 tel_check = '+'+message.contact.phone_number
             UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check, username=message.from_user.username)
-            for iru in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
-                cat = iru.category.ru
-                nar = iru.narx
-                if iru.podcategory:
-                    podcat =  iru.podcategory.ru
-                else:
-                    podcat = ''
-                if iru.narx:
-                    nar = iru.narx
-                else:
-                    nar = 'Цена договорная'
-                if iru.username:
-                    username = '@'+iru.username
-                else:
-                    username = iru.telefon
-                avto = iru.avto.ru
-                kub = iru.kub
-                viloyat = iru.viloyat.ru
-                tuman = iru.tuman.ru
-                telefon = iru.telefon
-                paket = iru.paket.name_ru
-            done_buttonru = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            done_buttonru.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
-            bot.send_message(message.from_user.id, f'Правильная ли информация, которую вы ввели?\n\nКатегория: {cat}, {podcat}\nНачальная цена: {nar}\nМарка машины: {avto}, {kub} куб\nОбласть: {viloyat}, {tuman}\nНомер телефона: {telefon}\nТелеграм: {username}\nТариф (paket): {paket}\n', reply_markup=done_buttonru)
+            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            btntel = []
+            for i in Paket.objects.all():
+                btntel.append(types.KeyboardButton(text=i.name_ru))
+            paket_button.add(*btntel)
+            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
+
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
         except:
-            if message.text in '+':
-                tel_check2 = message.text
-            else:
-                tel_check2 = '+'+message.text
-            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=tel_check2, username=message.from_user.username)
-            for iru in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
-                cat = iru.category.ru
-                nar = iru.narx
-                if iru.podcategory:
-                    podcat =  iru.podcategory.ru
-                else:
-                    podcat = ''
-                if iru.narx:
-                    nar = iru.narx
-                else:
-                    nar = 'Цена договорная'
-                if iru.username:
-                    username = '@'+iru.username
-                else:
-                    username = iru.telefon
-                avto = iru.avto.ru
-                kub = iru.kub
-                viloyat = iru.viloyat.ru
-                tuman = iru.tuman.ru
-                telefon = iru.telefon
-                paket = iru.paket.name_ru
-            done_buttonru = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-            done_buttonru.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
-            bot.send_message(message.from_user.id, f'Правильная ли информация, которую вы ввели?\n\nКатегория: {cat}, {podcat}\nНачальная цена: {nar}\nМарка машины: {avto}, {kub} куб\nОбласть: {viloyat}, {tuman}\nНомер телефона: {telefon}\nТелеграм: {username}\nТариф (paket): {paket}\n', reply_markup=done_buttonru)
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(telefon=Service.filter_number(message.text), username=message.from_user.username)
+            paket_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+            btntel = []
+            for i in Paket.objects.all():
+                btntel.append(types.KeyboardButton(text=i.name_ru))
+            paket_button.add(*btntel)
+            paket_button.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['home']))
+            bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['select_plan'], reply_markup=paket_button)
+
             TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['CHECK'])
+
+def paket_get(message, bot):
+    import datetime
+    from django.utils import timezone
+    if Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'oz':
+        for j in Paket.objects.filter(name_oz=message.text):
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        for ioz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
+            cat = ioz.category.oz
+            nar = ioz.narx
+            if ioz.podcategory:
+                podcat =  ioz.podcategory.oz
+            else:
+                podcat = ''
+            if ioz.narx:
+                nar = ioz.narx
+            else:
+                nar = 'Kelishilgan narx'
+            if ioz.username:
+                username = '@'+ioz.username
+            else:
+                username = ioz.telefon
+            avto = ioz.avto.oz
+            kub = ioz.kub
+            viloyat = ioz.viloyat.oz
+            tuman = ioz.tuman.oz
+            telefon = ioz.telefon
+            paket = ioz.paket.name_oz
+        done_buttonoz = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        done_buttonoz.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
+        bot.send_message(message.from_user.id, f'Kiritgan ma\'lumotlaringiz to\'g\'rimi?\n\nKategoriya: {cat}, {podcat}\nBoshlang\'ich narx: {nar}\nMoshina rusumi: {avto} {kub} kub\nViloyat: {viloyat}, {tuman}\nTelefon raqam: {telefon}\nTelegram: {username}\nTarif (paket): {paket}\n', reply_markup=done_buttonoz)
+        TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DONE'])
+
+    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'uz':
+        for j in Paket.objects.filter(name_uz=message.text):
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        for iuz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
+            cat = iuz.category.uz
+            nar = iuz.narx
+            if iuz.podcategory:
+                podcat =  iuz.podcategory.uz
+            else:
+                podcat = ''
+            if iuz.narx:
+                nar = iuz.narx
+            else:
+                nar = 'Келишилган нарх'
+            if iuz.username:
+                username = '@'+iuz.username
+            else:
+                username = iuz.telefon
+            avto = iuz.avto.uz
+            kub = iuz.kub
+            viloyat = iuz.viloyat.uz
+            tuman = iuz.tuman.uz
+            telefon = iuz.telefon
+            paket = iuz.paket.name_uz
+        done_buttonuz = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        done_buttonuz.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
+        bot.send_message(message.from_user.id, f'Киритган маълумотларингиз тўғрими?\n\nКатегория: {cat}, {podcat}\nБошланғич нарх: {nar}\nМошина русуми: {avto} {kub} куб\nВилоят: {viloyat}, {tuman}\nТелефон рақам: {telefon}\nТелеграм: {username}\nТариф (пакет): {paket}\n', reply_markup=done_buttonuz)
+        TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DONE'])
+    elif Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id)) == 'ru':
+        for j in Paket.objects.filter(name_ru=message.text):
+            UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(paket=j.id, deatline=(timezone.now()+datetime.timedelta(days=j.day)))
+        for iuz in UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False, status=False):
+            cat = iuz.category.uz
+            nar = iuz.narx
+            if iuz.podcategory:
+                podcat =  iuz.podcategory.uz
+            else:
+                podcat = ''
+            if iuz.narx:
+                nar = iuz.narx
+            else:
+                nar = 'Келишилган нарх'
+            if iuz.username:
+                username = '@'+iuz.username
+            else:
+                username = iuz.telefon
+            avto = iuz.avto.uz
+            kub = iuz.kub
+            viloyat = iuz.viloyat.uz
+            tuman = iuz.tuman.uz
+            telefon = iuz.telefon
+            paket = iuz.paket.name_uz
+        done_buttonru = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        done_buttonru.add(types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']), types.KeyboardButton(text=LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['no']))
+        bot.send_message(message.from_user.id, f'Правильная ли информация, которую вы ввели?\n\nКатегория: {cat}, {podcat}\nНачальная цена: {nar}\nМарка машины: {avto}, {kub} куб\nОбласть: {viloyat}, {tuman}\nНомер телефона: {telefon}\nТелеграм: {username}\nТариф (paket): {paket}\n', reply_markup=done_buttonru)
+        TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DONE'])
 
 
 def check(message, bot):
     if message.text == LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['yes']:
         bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['success_add'], reply_markup=home_func(message))
         TgUser.objects.filter(tg_id=message.from_user.id).update(step=USER_STEP['DEFAULT'])
-        bot.send_message(message.from_user.id, '01')
-
         if int(TgUser.objects.get(tg_id=message.from_user.id).balance) >= int(Paket.objects.get(id=UserCart.objects.get(user__tg_id=message.from_user.id, status=False, status_check=False).paket_id).price):
             from django.db.models import F
-            bot.send_message(message.from_user.id, '00')
-
             TgUser.objects.filter(tg_id=message.from_user.id).update(balance=F('balance') - int(Paket.objects.get(id=UserCart.objects.get(user__tg_id=message.from_user.id, status=False, status_check=False).paket_id).price))
-            bot.send_message(message.from_user.id, '0')
-
             UserCart.objects.filter(user__tg_id=message.from_user.id, status=False, status_check=False).update(status=True)
-            bot.send_message(message.from_user.id, '1')
             UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)
-            bot.send_message(message.from_user.id, '2')
             bot.send_message(message.from_user.id, LAN[Service.get_user_lan(TgUser.objects.filter(tg_id=message.from_user.id))]['activ_ok'])
         else:
             UserCart.objects.filter(user__tg_id=message.from_user.id, status_check=False).update(status_check=True)

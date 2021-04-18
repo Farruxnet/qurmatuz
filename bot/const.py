@@ -14,6 +14,7 @@ USER_STEP = {
     'GET_N': 12,
     'CHECK': 13,
     'FINAL': 14,
+    'DONE' : 23,
     #### search ####
     'SEARCH': 15,
     'SEARCH_POD': 16,
